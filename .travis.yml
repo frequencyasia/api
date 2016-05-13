@@ -1,8 +1,0 @@
-language: node_js
-node_js: '0.10'
-install: echo "skip install"
-branches:
-  only: master
-after_success:
-- git remote add deploy ssh://deploy@frequency.asia/var/git/api.git
-- git push deploy
