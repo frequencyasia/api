@@ -18,6 +18,11 @@ city_tags = db.Table('city_tags',
     db.Column('episode_id', db.Integer, db.ForeignKey('episode.id'))
 )
 
+associated_artists = db.Table('associated_artists',
+    db.Column('artist_id', db.Integer, db.ForeignKey('artist_tag.id')),
+    db.Column('associated_artist_id', db.Integer, db.ForeignKey('artist_tag.id'))
+)
+
 class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(255))
@@ -74,7 +79,7 @@ class Episode(db.Model):
         backref='episode')
     artists = db.relationship(
         'ArtistTag',
-        secondary=artist_tags,
+        secondary=associated_artists,
         backref='episode')
     show_id = db.Column(db.Integer, db.ForeignKey('show.id'))
 
@@ -146,6 +151,10 @@ class ArtistTag(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('country_tag.id'))
     city_id = db.Column(db.Integer, db.ForeignKey('city_tag.id'))
     image_path = db.Column(db.Unicode(255))
+    associated_artists = db.relationship(
+        'ArtistTag',
+        secondary=artist_tags,
+        backref='artist_tag')
 
     def get_city(self):
         if self.city_id:

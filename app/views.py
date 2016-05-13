@@ -5,6 +5,9 @@ from werkzeug.contrib.atom import AtomFeed
 from app import app
 from models import Show, Episode, ArtistTag, CityTag, CountryTag
 
+def make_external(url):
+    return urljoin(request.url_root, url)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -100,9 +103,6 @@ def country_tags(slug):
         'name': tag.name,
         'episodes': tag.get_episodes(),
     })
-
-def make_external(url):
-    return urljoin(request.url_root, url)
 
 @app.route('/shows.atom')
 def shows_feed():
