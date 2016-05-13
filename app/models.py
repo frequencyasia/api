@@ -237,3 +237,28 @@ class CityTag(db.Model):
 
     def __repr__(self):
         return self.name
+
+class Label(db.Model):
+    __tablename__ = 'label'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    slug = db.Column(db.Unicode(255), index=True, unique=True)
+    description = db.Column(db.UnicodeText())
+    link = db.Column(db.UnicodeText())
+    country_id = db.Column(db.Integer, db.ForeignKey('country_tag.id'))
+    city_id = db.Column(db.Integer, db.ForeignKey('city_tag.id'))
+    image_path = db.Column(db.Unicode(255))
+    artists = db.relationship('ArtistTag', backref='label', lazy='dynamic')
+
+    def get_episodes(self):
+        episodes = [episode.to_api_dict() for episode in Episode.query.all() if self in episode.cities and episode.has_started() and episode.is_published()]
+        return sorted(episodes, key=lambda k: k['start_time'], reverse=True)
+
+    def to_api_dict(self):
+        return {
+            'link': 'city/' + self.slug,
+            'name': self.name
+        }
+
+    def __repr__(self):
+        return self.name
