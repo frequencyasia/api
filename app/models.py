@@ -2,7 +2,6 @@ import time
 from datetime import datetime, timedelta
 from app import db
 
-
 artist_tags = db.Table('artist_tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('artist_tag.id')),
     db.Column('episode_id', db.Integer, db.ForeignKey('episode.id'))
