@@ -23,6 +23,12 @@ associated_artists = db.Table('associated_artists',
     db.Column('associated_artist_id', db.Integer, db.ForeignKey('artist_tag.id'))
 )
 
+label_artist = db.Table('label_artist',
+    db.Column('label_id', db.Integer, db.ForeignKey('label.id')),
+    db.Column('artist_id', db.Integer, db.ForeignKey('artist_tag.id'))
+)
+
+
 class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(255))
@@ -79,7 +85,7 @@ class Episode(db.Model):
         backref='episode')
     artists = db.relationship(
         'ArtistTag',
-        secondary=associated_artists,
+        secondary=artist_tags,
         backref='episode')
     show_id = db.Column(db.Integer, db.ForeignKey('show.id'))
 
@@ -153,7 +159,7 @@ class ArtistTag(db.Model):
     image_path = db.Column(db.Unicode(255))
     associated_artists = db.relationship(
         'ArtistTag',
-        secondary=artist_tags,
+        secondary=associated_artists,
         backref='artist_tag')
 
     def get_city(self):
@@ -248,7 +254,10 @@ class Label(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('country_tag.id'))
     city_id = db.Column(db.Integer, db.ForeignKey('city_tag.id'))
     image_path = db.Column(db.Unicode(255))
-    artists = db.relationship('ArtistTag', backref='label', lazy='dynamic')
+    artists = db.relationship(
+        'ArtistTag',
+        secondary=label_artist,
+        backref='label')
 
     def get_episodes(self):
         episodes = [episode.to_api_dict() for episode in Episode.query.all() if self in episode.cities and episode.has_started() and episode.is_published()]
