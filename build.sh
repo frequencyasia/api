@@ -5,5 +5,5 @@ source env/bin/activate
 env/bin/pip install -r requirements.txt
 deactivate
 # Run Upstart/UWSGI
-stop api-canary
-start api-canary
+sudo stop api-canary
+sudo start api-canary
