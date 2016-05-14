@@ -2,5 +2,5 @@
 exec &> githook.log
 virtualenv env
 source env/bin/activate
-pip install -r requirements.txt
+env/bin/pip install -r requirements.txt
 deactivate
