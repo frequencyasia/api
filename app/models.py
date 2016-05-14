@@ -156,10 +156,10 @@ class ArtistTag(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('country_tag.id'))
     city_id = db.Column(db.Integer, db.ForeignKey('city_tag.id'))
     image_path = db.Column(db.Unicode(255))
-    associated_artists = db.relationship(
-        'ArtistTag',
-        secondary=associated_artists,
-        backref='artist_tag')
+    # associated_artists = db.relationship(
+    #     'ArtistTag',
+    #     secondary=associated_artists,
+    #     backref='artist_tag')
 
     def get_city(self):
         if self.city_id:
